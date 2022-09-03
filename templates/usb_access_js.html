@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- 表示デバイスに併せた表示 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>USBDevice Test</title>
+		<style>
+			.textCenter { text-align: center ; }
+			.smfont { font-size: 0.7em; }
+		</style>
+	</head>
+	<body>
+		<!-- brタグは消し去る予定 bootstrap導入予定 -->
+		<h3>
+			<div class="header-title textCenter">
+				USBDevice Test
+			</div>
+		</h3>
+		<div class="mainArea">
+			<br>
+			<!-- id をいじることで、変数を押し込んだformを作成する -->
+			<div id="button" class="button textCenter">
+				<button id="exe">excute</button>
+			</div>
+			<br>				
+			<div class="message">
+				<div id="message-title" class="message-title" style="display: inline;"></div>
+				<br>
+				<div id="message" class="message-info smfont" style="display: inline;"></div>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/nfc_module.js') }}"></script>
+	</body>
+</html>
