@@ -305,24 +305,21 @@ var make_form = async ( id , idm_data) => {
 var submitFunction = async( ) => {
     var idm_array = document.getElementById("idm_data").innerText ;
     var idm_data = String(idm_array);
-    console.log(typeof idm_data);
+    console.log(typeof idm_data, idm_data);
+    // データをわざわざJSON使って改変する必要がなかった
     // var data_json = JSON.parse({"idm_data" : "' + String(idm_data)+  '"}) ;
-    var data_json = JSON.stringify({message : "this is test"});
-    console.log(typeof data_json, data_json)
+    // var data_json = JSON.stringify({message : "this is test"});
+    // console.log(typeof data_json, data_json)
     // send_dataにpostリクエストを送信
-    $(function(data_json){
+    $(function(){
         $.ajax({
             url : "/send_data",
-            dataType : "application/json",
+            dataType : '{{ ajax_url_callback }}',
             type : "POST",
-            data : data_json,
+            data : {idm_data},
         }).done(
-            function(data){
-                alert("ok");
-            }
-        ).fail(
-            function(XMLHttpRequest, textStatus, errorThrown){
-                alert("error");
+            function(){
+                window.location.href = "/payment_page";
             }
         )
     });
