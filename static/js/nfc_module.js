@@ -7,7 +7,7 @@ exe = document.querySelector( '#exe' ) ,
 usbDevice = '' ,
 usbConfiguration = {} ,
 seqNumber = 0 ;
-console.log(button.innerHTML) ;
+// console.log(button.innerHTML) ;
 
 const DeviceFilter = [
     { vendorId : 1356 , productId: 3528 },	// SONY PaSoRi RC-S300/S
@@ -292,12 +292,10 @@ var make_form = async ( id , idm_data) => {
     overwrite_html.innerHTML = "";
     // 書き換え
     var new_html = '\
-        <div id="button">\
-            NFCが認識されました！\
-            <div name="idm_data" id="idm_data">'　+　idm_data　+　'</div>\
-            <button onclick="submitFunction()">送信</button>\
-        </div>\
-    ';
+        NFCが認識されました！\
+        <div name="idm_data" id="idm_data">'　+　idm_data　+　'</div>\
+        <button onclick="submitFunction()">送信</button>\
+        ';
     return overwrite_html.innerHTML += new_html;
 }
 
@@ -313,15 +311,14 @@ var submitFunction = async( ) => {
     // send_dataにpostリクエストを送信
     $(function(){
         $.ajax({
-            url : "/send_data",
-            dataType : '{{ ajax_url_callback }}',
+            url : '{{ ajex_url_callback }}',
             type : "POST",
             data : {idm_data},
-        }).done(
-            function(){
-                window.location.href = "/payment_page";
-            }
-        )
+        }).done((data) => {
+            var data = JSON.parse(data);
+            console.log(data.data);
+            // window.location.href = "{{ transitions_page }}";
+        })
     });
     
     return;
