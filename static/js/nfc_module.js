@@ -2,12 +2,10 @@
 // queryselector 文書内の最初の Element 
 let messageTitle = document.querySelector( '#message-title' ) ,
 button = document.querySelector(' #button ') ,
-message = document.querySelector( '#message' ) ,
 exe = document.querySelector( '#exe' ) ,
 usbDevice = '' ,
 usbConfiguration = {} ,
 seqNumber = 0 ;
-// console.log(button.innerHTML) ;
 
 const DeviceFilter = [
     { vendorId : 1356 , productId: 3528 },	// SONY PaSoRi RC-S300/S
@@ -19,8 +17,12 @@ exe.addEventListener( 'click', async () => {
     await usbDeviceConnect() ;
     console.log( usbDevice, usbConfiguration ) ;
     await usbDeviceOpen() ;
-    await felica() ;
-    // make_form("button");
+    let resdata = await felica() ;
+    if ( resdata.IDm == "" ){
+        // 読み込めませんでした的な何かが欲しい
+        return;
+    }
+    await checkUserInfo("button", arrayToHex( resdata.IDm )) ;
     await usbDeviceClose() ;
     return;
 });
@@ -86,15 +88,15 @@ var usbDeviceOpen = async() => {
     res = await recvUSB( 64 ) ;
     await sleep( 50 ) ;
     
-//	await sendUSB( getSerialNumber, 'Get SerialNumber' ) ;
-//	res = await recvUSB( 64 ) ;
+    //	await sendUSB( getSerialNumber, 'Get SerialNumber' ) ;
+    //	res = await recvUSB( 64 ) ;
 
     return ;
 }
 
 //	USB デバイスクローズ
 var usbDeviceClose = async() => {
-    message.innerHTML += '**CLOSE<br/>' ;
+    // message.innerHTML += '**CLOSE<br/>' ;
 
     // RC-S300 コマンド
     const endTransparent = [ 0xFF, 0x50, 0x00, 0x00, 0x02, 0x82, 0x00, 0x00 ] ;
@@ -132,12 +134,9 @@ var felica = async () => {
         resdata.IDm = resdata.data.slice(0,8) ;
         resdata.PMm = resdata.data.slice(8,16) ;
         resdata.systemCode = resdata.data.slice(16,18) ;
-        // button.innerHTML = '' ;
-        // button.innerHTML = '<p>ﾔｯﾀﾈ</q>' ;
-        // messageTitle.innerHTML = 'ポーリング成功：カードが見つかりました。<br/>IDm:' + arrayToHex( resdata.IDm ) + '<br/>システムコード:' + arrayToHex( resdata.systemCode ) ;
-        await make_form("button", arrayToHex( resdata.IDm )) ;
+        return resdata
     } else {
-        messageTitle.innerHTML = 'ポーリング失敗：カードが見つかりませんでした。' ;
+        return {IDm : ""};
     }
 }
 
@@ -202,7 +201,7 @@ var sendUSB = async( argData, argProc = '' ) => {
     await usbDevice.transferOut( usbConfiguration.endPointOutNum, rdData ) ;
     const dataStr = arrayToHex( rdData ) ;
     // console.log( dataStr ) ;
-    message.innerHTML += 'SEND (' + argProc + ')<br/>&nbsp;&nbsp;&nbsp;--> [ ' + dataStr + ']<br/>' ;
+    // message.innerHTML += 'SEND (' + argProc + ')<br/>&nbsp;&nbsp;&nbsp;--> [ ' + dataStr + ']<br/>' ;
 }
 
 //	リクエストヘッダーの付加
@@ -230,7 +229,7 @@ var recvUSB = async( argLength ) => {
     const res = await usbDevice.transferIn( usbConfiguration.endPointInNum, argLength ) ;
     const resStr = binArrayToHex( res.data ) ;
     console.log( res ) ;
-    message.innerHTML += 'RECV Status[' + res.status + ']<br/>&nbsp;&nbsp;&nbsp;<-- [ ' + resStr + ']<br/>' ;
+    // message.innerHTML += 'RECV Status[' + res.status + ']<br/>&nbsp;&nbsp;&nbsp;<-- [ ' + resStr + ']<br/>' ;
     
     return res ;
 }
@@ -283,13 +282,13 @@ var sleep = async (msec) => {
     return new Promise(resolve => setTimeout(resolve, msec));
 }
 
-var make_form = async ( id , idm_data) => {
+// データ受け渡しHTMLの作成
+var checkUserInfo = async ( id , idm_data) => {
     // 書き換え部分指定
     var overwrite_html = document.getElementById(id);
-    console.log(overwrite_html.innerHTML);
-    // 初期化
-    overwrite_html.innerHTML = "";
+    
     // 書き換え
+    overwrite_html.innerHTML = "";
     var new_html = '\
         NFCが認識されました！\
         <div name="idm_data" id="idm_data">'　+　idm_data　+　'</div>\
@@ -314,13 +313,11 @@ var submitFunction = async( ) => {
             type : "POST",
             data : {idm_data},
         }).done((data) => {
-            // 受け取れた(good)
             var data = JSON.parse(data);
             console.log(data.hash_data);
             var hash_data = data.hash_data;
             // ページ遷移
             window.location.href = "/payment_page/" + hash_data;
-            // window.location.href = "{{ transitions_page }}";
         })
     });
     return;

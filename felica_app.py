@@ -13,7 +13,7 @@ transaction = {}
 # カード読み取りページ
 @app.route("/", methods=["GET"])
 def scan_page():
-    return render_template("usb_access_js.html",)
+    return render_template("felica_scan.html",)
 
 # 決済ページ
 @app.route("/payment_page/<user_hash>")
