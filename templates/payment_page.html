@@ -11,5 +11,9 @@
         <p>idm{{ idm_data }}</p>
         <p>残高 {{ card_balance }}</p>
         
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<script src="{{ url_for('static',  filename='js/bootstrap.bundle.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/nfc_module.js') }}"></script>
+	
     </body>
 </html>

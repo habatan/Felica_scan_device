@@ -38,7 +38,11 @@
          <button class="w-100 btn btn-outline-secondary" type="submit">ログインフォームへ</button>
       </form>
    </main>
-    </body>
+   
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',  filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/nfc_module.js') }}"></script>
+
     <umsdataelement id="UMSSendDataEventElement"></umsdataelement>
     <div id="TAG_ID4TOOLBAR_UMS_GUID" style="display: none;">5A69B313-20E0-2E6E-E0E4-EC8D9D9C46D4</div>
     <div id="tmtoolbar_ums_injected" style="display: none;">init_ums</div>
