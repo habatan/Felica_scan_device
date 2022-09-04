@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>home</title>
+    <!-- CDNはテスト用で本番環境では導入しない -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}") crossorigin="anonymous"> 
+
+  </head>
+
+    <header>
+      <nav class="navbar fixed-top navbar-expand-lg navbar-light be-light">
+        <div class="container-fluid">
+          <!-- <a class="navbar-brand" href="#">サイト名が入る場所</a> -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">ホーム</a>
+              </li>
+              <li class="nav-item">
+                <!-- <a class="nav-link" href="#">ヘルプ</a> -->
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>      
+    </header>
+    <main class="form-signin">
+    <div class="text-center"> 
+       <h2>{{ msg }}</h2>
+       <br>
+    </div>
+      <form action="/logout">
+         <button class="w-100 btn btn-outline-secondary" type="submit">ログインフォームへ</button>
+      </form>
+   </main>
+    </body>
+    <umsdataelement id="UMSSendDataEventElement"></umsdataelement>
+    <div id="TAG_ID4TOOLBAR_UMS_GUID" style="display: none;">5A69B313-20E0-2E6E-E0E4-EC8D9D9C46D4</div>
+    <div id="tmtoolbar_ums_injected" style="display: none;">init_ums</div>
+
+  </html>

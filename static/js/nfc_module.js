@@ -56,7 +56,7 @@ var usbDeviceConnect = async () => {
 
 //	USB デバイスオープン
 var usbDeviceOpen = async() => {
-    message.innerHTML += '**OPEN<br/>' ;
+    // message.innerHTML += '**OPEN<br/>' ;
 
     await usbDevice.open() ;		// USBデバイスセッション開始
     await usbDevice.selectConfiguration( usbConfiguration.confValue ) ;		// USBデバイスの構成を選択
@@ -132,9 +132,9 @@ var felica = async () => {
         resdata.IDm = resdata.data.slice(0,8) ;
         resdata.PMm = resdata.data.slice(8,16) ;
         resdata.systemCode = resdata.data.slice(16,18) ;
-        button.innerHTML = '' ;
-        button.innerHTML = '<p>ﾔｯﾀﾈ</q>' ;
-        messageTitle.innerHTML = 'ポーリング成功：カードが見つかりました。<br/>IDm:' + arrayToHex( resdata.IDm ) + '<br/>システムコード:' + arrayToHex( resdata.systemCode ) ;
+        // button.innerHTML = '' ;
+        // button.innerHTML = '<p>ﾔｯﾀﾈ</q>' ;
+        // messageTitle.innerHTML = 'ポーリング成功：カードが見つかりました。<br/>IDm:' + arrayToHex( resdata.IDm ) + '<br/>システムコード:' + arrayToHex( resdata.systemCode ) ;
         await make_form("button", arrayToHex( resdata.IDm )) ;
     } else {
         messageTitle.innerHTML = 'ポーリング失敗：カードが見つかりませんでした。' ;
@@ -157,7 +157,7 @@ var usbDeviceCommunicationThruEX = async( argCom ) => {
     // FeliCa Lite-S コマンドにレングスを付加
     let felicaComLen = argCom.length + 1 ;
     let felicaCom = [ felicaComLen, ...argCom ] ;
-    console.log( felicaCom ) ;
+    // console.log( felicaCom ) ;
 
     // FeliCa Lite-S リクエストヘッダーを付加
     felicaTimeout *= 1e3 ;						// マイクロ秒へ変換
@@ -201,7 +201,7 @@ var sendUSB = async( argData, argProc = '' ) => {
     const rdData = addReqHeader(argData) ;
     await usbDevice.transferOut( usbConfiguration.endPointOutNum, rdData ) ;
     const dataStr = arrayToHex( rdData ) ;
-    console.log( dataStr ) ;
+    // console.log( dataStr ) ;
     message.innerHTML += 'SEND (' + argProc + ')<br/>&nbsp;&nbsp;&nbsp;--> [ ' + dataStr + ']<br/>' ;
 }
 
@@ -222,7 +222,6 @@ var addReqHeader = ( argData ) => {
     retVal[6] = ++seqNumber ;				// 認識番号
 
     0 != dataLen && retVal.set( argData, 10 ) ;	// コマンド追加
-
     return retVal ;
 }
 
@@ -311,16 +310,19 @@ var submitFunction = async( ) => {
     // send_dataにpostリクエストを送信
     $(function(){
         $.ajax({
-            url : '{{ ajex_url_callback }}',
+            url : '/send_data',
             type : "POST",
             data : {idm_data},
         }).done((data) => {
+            // 受け取れた(good)
             var data = JSON.parse(data);
-            console.log(data.data);
+            console.log(data.hash_data);
+            var hash_data = data.hash_data;
+            // ページ遷移
+            window.location.href = "/payment_page/" + hash_data;
             // window.location.href = "{{ transitions_page }}";
         })
     });
-    
     return;
 
 }
