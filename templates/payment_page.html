@@ -4,10 +4,12 @@
 		<!-- 表示デバイスに併せた表示 -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}") crossorigin="anonymous">
     </head>
     <body>
         <h2>決済ページになるはず</h2>
         <p>idm{{ idm_data }}</p>
         <p>残高 {{ card_balance }}</p>
+        
     </body>
 </html>

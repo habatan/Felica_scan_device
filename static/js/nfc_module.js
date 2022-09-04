@@ -13,16 +13,14 @@ const DeviceFilter = [
 ] ;
 
 // hazama これが本体やな
+// 実行ボタンに変更して、スタイルも変えたい
 exe.addEventListener( 'click', async () => {
     await usbDeviceConnect() ;
-    console.log( usbDevice, usbConfiguration ) ;
     await usbDeviceOpen() ;
-    let resdata = await felica() ;
-    if ( resdata.IDm == "" ){
-        // 読み込めませんでした的な何かが欲しい
-        return;
-    }
-    await checkUserInfo("button", arrayToHex( resdata.IDm )) ;
+    var resdata = await felica() ;
+
+    await checkUserInfo("button", arrayToHex( resdata )) ;
+    console.log( resdata.IDm ) ;
     await usbDeviceClose() ;
     return;
 });
@@ -134,9 +132,9 @@ var felica = async () => {
         resdata.IDm = resdata.data.slice(0,8) ;
         resdata.PMm = resdata.data.slice(8,16) ;
         resdata.systemCode = resdata.data.slice(16,18) ;
-        return resdata
+        return resdata.IDm;
     } else {
-        return {IDm : ""};
+        return "";
     }
 }
 
@@ -292,7 +290,7 @@ var checkUserInfo = async ( id , idm_data) => {
     var new_html = '\
         NFCが認識されました！\
         <div name="idm_data" id="idm_data">'　+　idm_data　+　'</div>\
-        <button onclick="submitFunction()">送信</button>\
+        <button type="button" class="btn btn-primary btn-lg" onclick="submitFunction()">このカードを使う</button>\
         ';
     return overwrite_html.innerHTML += new_html;
 }
